@@ -1,0 +1,22 @@
+﻿@{
+    ViewData["Title"] = "Home Page";
+}
+@inject SignInManager<ApplicationUser> _signInManager
+
+<div class="text-center">
+    <h1 class="display-4">Cows and Bulls</h1>
+    <img class="img-fluid w-50 h-50" src="~/images/CowsAndBulls.png" />
+    <br />
+    @if (_signInManager.IsSignedIn(User))
+    {
+        <a class="display-4 m-4" asp-controller="GamePlay" asp-action="Play">
+            Play
+        </a>
+    }
+    else
+    {
+        <a class="display-4 m-4" asp-controller="Account" asp-action="SignIn">
+            Play
+        </a>
+    }
+</div>

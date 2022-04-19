@@ -1,0 +1,84 @@
+﻿@{
+    ViewData["Title"] = "Playing Page";
+    Layout = "_Layout";
+}
+<h2 class="text-center text-info">Bulls and Cows</h2>
+<hr />
+<div class="container">
+    <div class="text-center">
+        <p>Discover the hidden code!</p>
+        <p>Click, or use arrow keys, to change your guess in each box.</p>
+        <p>(Bulls and Cows is similar to, but came before, the board game MastermindTM*)</p>
+        <p>Bulls = correct code, correct position.</p>
+        <p>Cows = correct code, wrong position.</p>
+    </div>
+    <hr />
+    <div class="d-flex justify-content-center bg-light p-5">
+        <div class="d-flex flex-row bd-highlight mb-3r my-1">
+            @for (int i = 1; i <=4; i++)
+            {
+                var idName = "digit" + i;
+                <div class="mx-2">
+                    <input class="border-danger" value="0" id=@idName type="number" maxlength="1" min="0" max="9" oninput="javascript: if (this.value.length > this.maxLength) this.value = this.value.slice(0, this.maxLength);" />
+                </div>
+            }
+            <div class="mx-1">
+                <input class="btn btn-success" id="submitButton" type="button" value="Go" />
+            </div>
+        </div>
+    </div>
+    <div>
+        <div class=" text-center">
+            <h5>Bulls :<span class="text-success mx-2" id="bulls"></span>  </h5>
+            <br />
+            <h5>Cows :<span class="text-success mx-2" id="cows"></span> </h5>
+        </div>
+    </div>
+</div>
+@section playingGame
+{
+    <script type="text/javascript">
+        $('#submitButton').click(function () {
+            var opponentNumber = [];
+            for (let i = 1; i <= 4; i++) {
+                var idName = "#digit" + i;
+                opponentNumber.push($(idName).val());
+            }
+            for (let x = 0; x < 4; x++) {
+                if (opponentNumber[x] == "") {
+                    alert("any input field can't be empty!");
+                    return true;
+                }
+            }
+            var date = new Date();
+            var secretNumber = ('0' + (date.getDate())).slice(-2) + ('0' + (date.getHours())).slice(-2);
+            var cows = 0;
+            var bulls = 0;
+            for (let i = 0; i < 4; i++) {
+                if (opponentNumber[i] == secretNumber[i])
+                    bulls++;
+            }
+            var secretNumber2 = secretNumber.split("");
+            opponentNumber.sort();
+            secretNumber2.sort();
+            var s = new Array(10);
+            s.fill(0);
+            var t = new Array(10);
+            t.fill(0);
+            for (let i = 0; i < 4; i++) {
+                s[opponentNumber[i]]++;
+                t[secretNumber2[i]]++;
+            }
+            let count = 0;
+            for (let i = 0; i < 10; i++) {
+                count += Math.min(s[i], t[i]);
+            }
+            cows = count - bulls;
+            $("#cows").html(cows);
+            $("#bulls").html(bulls);
+        });
+    </script>
+
+}
+
+
